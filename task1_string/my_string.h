@@ -13,9 +13,18 @@ public:
 	String& operator=(const String&) = default; // оператор копирования
 	String& operator=(String&&) = default; // оператор перемещения
 
+	int length() const;
+	bool empty() const;
+	const char* c_str() const;
+	char& operator[](size_t);
+	const char& operator[](size_t) const;
+
 private:
 	size_t size_;
 	char* string_;
+
+	void copyString(const char*);
+	size_t getLength(const char*);
 };
 
 #endif // STRING_H_

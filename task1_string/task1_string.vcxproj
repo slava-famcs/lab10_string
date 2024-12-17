@@ -128,10 +128,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="string.h" />
+    <ClInclude Include="my_string.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="string.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="my_string.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
