@@ -8,14 +8,14 @@ public:
 	String(const char*); // конструктор от С строки
 	String(const int&, const char&); // констр., иниц. объект стр. из count симв. ch
 	String(const String&) = default; // конструктор копирования
-	String(String&&) = default; // конструктор перемещения
+	String(String&&); // конструктор перемещения
 	~String(); // деструктор
 	String& operator=(const String&) = default; // оператор копирования
 	String& operator=(String&&) = default; // оператор перемещения
 
-	int length() const;
+	int length();
 	bool empty() const;
-	const char* c_str() const;
+	char* c_str() const;
 	char& operator[](size_t);
 	const char& operator[](size_t) const;
 	char& front();
@@ -23,6 +23,7 @@ public:
 	char& back();
 	const char& back() const;
 	void reserve(int);
+	void push_back(char);
 
 private:
 	size_t size_;
