@@ -18,12 +18,17 @@ public:
 	const char* c_str() const;
 	char& operator[](size_t);
 	const char& operator[](size_t) const;
+	char& front();
+	const char& front() const;
+	char& back();
+	const char& back() const;
+	void reserve(int);
 
 private:
 	size_t size_;
 	char* string_;
 
-	void copyString(const char*);
+	void copyString(char*, const char*);
 	size_t getLength(const char*);
 };
 
