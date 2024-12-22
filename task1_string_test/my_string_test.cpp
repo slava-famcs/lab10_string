@@ -48,6 +48,9 @@ TEST_F(StringTest, reserveTest) {
 	newString.reserve(5);
 	ASSERT_EQ(newString.length(), 0);
 	EXPECT_TRUE(newString.empty());
+
+	// TODO сделать метод getCapacity() и через него сделать этот тест
+
 }
 
 TEST_F(StringTest, pushBackTest) {
@@ -58,4 +61,32 @@ TEST_F(StringTest, pushBackTest) {
 	newString.push_back('i');
 	ASSERT_EQ(newString.length(), 2);
 	EXPECT_STREQ(newString.c_str(), "Hi");
+}
+
+TEST_F(StringTest, popBackTest) {
+	myString.pop_back();
+	ASSERT_EQ(myString.length(), 7);
+	EXPECT_STREQ(myString.c_str(), "MyStrin");
+}
+
+TEST_F(StringTest, clearTest) {
+	myString.clear();
+	EXPECT_TRUE(myString.empty());
+}
+
+TEST_F(StringTest, insertTest) {
+	myString.insert(8, String(" in C++"));
+	ASSERT_EQ(myString.length(), 15);
+	EXPECT_STREQ(myString.c_str(), "MyString in C++");
+	myString.insert(8, String(" is"));
+	ASSERT_EQ(myString.length(), 18);
+	EXPECT_STREQ(myString.c_str(), "MyString is in C++");
+	myString.insert(0, String("Hi "));
+	ASSERT_EQ(myString.length(), 21);
+	EXPECT_STREQ(myString.c_str(), "Hi MyString is in C++");
+	newString.insert(0, String("Microsoft"));
+	ASSERT_EQ(newString.length(), 9);
+	EXPECT_STREQ(newString.c_str(), "Microsoft");
+
+	// TODO insert не выделяет доп. память, когда вставляешь не в конец, а в середину
 }

@@ -7,28 +7,30 @@
 #include <exception>
 #include <stdexcept>
 
-String::String() : size_(0), string_(nullptr) {}
+String::String() : size_(0), capacity_(0), string_(nullptr) {}
 
 String::String(const char* str) {
 	if (str) { // если копируемся не от пустой строки
 		size_ = std::strlen(str);
+		capacity_ = size_;
 		string_ = new char[size_];
 		std::strcpy(string_, str);
 	}
 	else {
-		*this = String();
+		size_ = capacity_ = 0;
+		string_ = nullptr;
 	}
 }
 
-String::String(const int& count, const char& ch) {
-	size_ = count;
+String::String(const int& count, const char& ch) : size_(count), capacity_(count) {
 	string_ = new char[count];
 	for (size_t i = 0; i < count; ++i) {
 		string_[i] = ch;
 	}
 }
 
-String::String(String&& other) noexcept : string_(other.string_), size_(other.size_) {
+String::String(String&& other) noexcept : string_(other.string_), size_(other.size_),
+capacity_(other.capacity_) {
 	other = String();
 }
 
@@ -38,12 +40,14 @@ String& String::operator=(String&& other) noexcept {
 		delete string_; // предварит. освобождаем старую память
 		string_ = other.string_;
 		size_ = other.size_;
+		capacity_ = other.capacity_;
 		other = String();
 	}
 	return *this;
 }
 
 String::~String() {
+	size_ = capacity_ = 0;
 	string_ = nullptr;
 	delete string_;
 }
@@ -108,7 +112,7 @@ const char& String::back() const {
 }
 
 void String::reserve(const int& capacity) {
-	if (capacity > size_) {
+	if (capacity > capacity_) {
 		char* tmp = new char[capacity];
 		for (size_t i = 0; i < size_; ++i) {
 			tmp[i] = string_[i];
@@ -116,17 +120,15 @@ void String::reserve(const int& capacity) {
 		string_ = nullptr;
 		delete string_;
 		string_ = tmp;
+		capacity_ = capacity;
 	}
 }
 
 void String::push_back(const char& ch) {
-	try {
-		string_[size_ + 1] = ch;
+	if (size_ == capacity_) {
+		reserve(capacity_ > 0 ? capacity_ * 2 : 1);
 	}
-	catch (const std::bad_alloc&) { // если не хватает памяти
-		reserve(size_ > 0 ? size_ * 2 : 1);
-		string_[size_ + 1] = ch;
-	}
+	string_[size_] = ch;
 	++size_;
 }
 
@@ -142,7 +144,7 @@ void String::clear() {
 }
 
 void String::insert(const int& index, const String& str) {
-	if (index >= size_) {
+	if (index > size_) {
 		throw std::out_of_range("index is outside the array");
 	}
 	for (size_t i = size_; i > index; --i) {
@@ -161,7 +163,7 @@ void String::insert(const int& index, const String& str) {
 }
 
 void String::insert(const int& index, const char* str, const int& count) {
-	if (index >= size_) {
+	if (index > size_) {
 		throw std::out_of_range("index is outside the array");
 	}
 	for (size_t i = size_; i > index; --i) {
