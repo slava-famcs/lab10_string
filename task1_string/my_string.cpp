@@ -1,128 +1,191 @@
+﻿/* деактивация предупреждений компилятора
+т.к. функция std::strcpy() из библ. cstring помечена как устаревшая */
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "my_string.h"
+#include <cstring>
+#include <exception>
+#include <stdexcept>
 
-void String::copyString(char* destination, const char* str) {
-	if (getLength(destination) < getLength(str)) {
-		throw "line sizes error";
-	}
-	int i;
-	for (i = 0; i < getLength(str); ++i) {
-		destination[i] = str[i];
-	}
-	destination[i + 1] = '\0';
-}
-
-size_t String::getLength(const char* str) {
-	size_t length = 0;
-	while (*str != '\0') {
-		++length;
-		++str;
-	}
-	return length;
-}
-
-String::String() {
-	size_ = 0;
-	string_ = new char[size_ + 1] {'\0'};
-}
+String::String() : size_(0), string_(nullptr) {}
 
 String::String(const char* str) {
-	size_ = getLength(str);
-	string_ = new char[size_ + 1];
-	copyString(string_, str);
+	if (str) { // если копируемся не от пустой строки
+		size_ = std::strlen(str);
+		string_ = new char[size_];
+		std::strcpy(string_, str);
+	}
+	else {
+		*this = String();
+	}
 }
 
 String::String(const int& count, const char& ch) {
 	size_ = count;
-	string_ = new char[count + 1];
-	for (int i = 0; i < count; ++i) {
+	string_ = new char[count];
+	for (size_t i = 0; i < count; ++i) {
 		string_[i] = ch;
 	}
-	string_[count] = '\0';
 }
 
-String::String(String&& other) : string_(other.string_), size_(other.size_) {
-	other.string_ = nullptr;
-	other.size_ = 0;
+String::String(String&& other) noexcept : string_(other.string_), size_(other.size_) {
+	other = String();
+}
+
+String& String::operator=(String&& other) noexcept {
+	if (this != &other) {
+		string_ = nullptr;
+		delete string_; // предварит. освобождаем старую память
+		string_ = other.string_;
+		size_ = other.size_;
+		other = String();
+	}
+	return *this;
 }
 
 String::~String() {
 	string_ = nullptr;
-	delete[] string_;
+	delete string_;
 }
 
-int String::length() {
-	return getLength(string_) - 1;
+int String::length() const {
+	return (int) size_;
 }
 
 bool String::empty() const {
 	return !size_;
 }
 
-char* String::c_str() const {
-	return string_;
+const char* String::c_str() const {
+	char* tmp = new char[size_ + 1]; // +1 для заверш. симв.
+	for (size_t i = 0; i < size_; ++i) {
+		tmp[i] = string_[i];
+	}
+	tmp[size_] = '\0';
+	return tmp;
 }
 
-char& String::operator[](size_t index) {
-	if (index > size_) {
-		throw "non-existent index";
+char& String::operator[](const size_t& index) {
+	if (index >= size_) {
+		throw std::out_of_range("index is outside the array");
 	}
 	return string_[index];
 }
 
-const char& String::operator[](size_t index) const {
-	if (index > size_) {
-		throw "non-existent index";
+const char& String::operator[](const size_t& index) const {
+	if (index >= size_) {
+		throw std::out_of_range("index is outside the array");
 	}
 	return string_[index];
 }
 
 char& String::front() {
 	if (!size_) {
-		throw "the string is empty";
+		throw std::out_of_range("the string is empty");
 	}
 	return string_[0];
 }
 
 const char& String::front() const {
 	if (!size_) {
-		throw "the string is empty";
+		throw std::out_of_range("the string is empty");
 	}
 	return string_[0];
 }
 
 char& String::back() {
 	if (!size_) {
-		throw "the string is empty";
+		throw std::out_of_range("the string is empty");
 	}
-	int i;
-	for (i = 0; string_[i] != '\0'; ++i);
-	return string_[i - 2];
+	return string_[size_ - 1];
 }
 
 const char& String::back() const {
 	if (!size_) {
+		throw std::out_of_range("the string is empty");
+	}
+	return string_[size_ - 1];
+}
+
+void String::reserve(const int& capacity) {
+	if (capacity > size_) {
+		char* tmp = new char[capacity];
+		for (size_t i = 0; i < size_; ++i) {
+			tmp[i] = string_[i];
+		}
+		string_ = nullptr;
+		delete string_;
+		string_ = tmp;
+	}
+}
+
+void String::push_back(const char& ch) {
+	try {
+		string_[size_ + 1] = ch;
+	}
+	catch (const std::bad_alloc&) { // если не хватает памяти
+		reserve(size_ > 0 ? size_ * 2 : 1);
+		string_[size_ + 1] = ch;
+	}
+	++size_;
+}
+
+void String::pop_back() {
+	if (!size_) {
 		throw "the string is empty";
 	}
-	int i;
-	for (i = 0; string_[i] != '\0'; ++i);
-	return string_[i - 2];
+	--size_; // посл. симв. остался в памяти, но уже как мусор
 }
 
-void String::reserve(int capacity) {
-	if (capacity > size_) {
-		char* newString = new char[capacity + 1];
-		copyString(newString, string_);
-		string_ = nullptr;
-		delete[] string_;
-		string_ = newString;
-		size_ = capacity;
-	}
+void String::clear() {
+	size_ = 0;
 }
 
-void String::push_back(char ch) {
-	if (getLength(string_) + 1 > size_) {
-		reserve(size_ > 0 ? size_ * 2 : 1);
+void String::insert(const int& index, const String& str) {
+	if (index >= size_) {
+		throw std::out_of_range("index is outside the array");
 	}
-	string_[getLength(string_) - 2] = ch;
-	string_[getLength(string_)] = '\0';
+	for (size_t i = size_; i > index; --i) {
+		string_[i + str.size_ - 1] = string_[i - 1]; // cдвиг вправо
+	}
+	try {
+		for (size_t i = 0; i < str.size_; ++i) {
+			string_[index + i] = str.string_[i];
+		}
+	}
+	catch (const std::bad_alloc&) {
+		reserve(size_ + str.size_);
+		insert(index, str); // рекурсивный вызов
+	}
+	size_ = (index + str.size_) > size_ ? (index + str.size_) : size_;
+}
+
+void String::insert(const int& index, const char* str, const int& count) {
+	if (index >= size_) {
+		throw std::out_of_range("index is outside the array");
+	}
+	for (size_t i = size_; i > index; --i) {
+		string_[i + count - 1] = string_[i - 1];
+	}
+	try {
+		for (size_t i = 0; i < count; ++i) {
+			string_[index + i] = str[i];
+		}
+	}
+	catch (const std::bad_alloc&) {
+		reserve(size_ + count);
+		insert(index, str, count);
+	}
+	size_ = (index + count) > size_ ? (index + count) : size_;
+}
+
+void String::erase(const int& index, int count = 1) {
+	if (index >= size_) {
+		throw std::out_of_range("index is outside the array");
+	}
+	count = std::min(count, length() - index);
+	for (size_t i = index; i < size_ - count; ++i) {
+		string_[i] = string_[i + count]; // cдвиг влево
+	}
+	size_ -= count;
 }

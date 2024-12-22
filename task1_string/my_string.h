@@ -4,33 +4,38 @@
 
 class String {
 public:
-	String(); // конструктор по умолчанию
+	String();
 	String(const char*); // конструктор от С строки
 	String(const int&, const char&); // констр., иниц. объект стр. из count симв. ch
 	String(const String&) = default; // конструктор копирования
-	String(String&&); // конструктор перемещения
-	~String(); // деструктор
+	String(String&&) noexcept; // конструктор перемещения
+	~String();
 	String& operator=(const String&) = default; // оператор копирования
-	String& operator=(String&&) = default; // оператор перемещения
+	String& operator=(String&&) noexcept; // оператор перемещения
 
-	int length();
+	int length() const;
 	bool empty() const;
-	char* c_str() const;
-	char& operator[](size_t);
-	const char& operator[](size_t) const;
+	const char* c_str() const;
+
+	char& operator[](const size_t&);
+	const char& operator[](const size_t&) const;
 	char& front();
 	const char& front() const;
 	char& back();
 	const char& back() const;
-	void reserve(int);
-	void push_back(char);
+
+	void reserve(const int&);
+	void push_back(const char&);
+	void pop_back();
+	void clear();
+	void insert(const int&, const String&);
+	void insert(const int&, const char*, const int&);
+	void erase(const int&, int);
 
 private:
 	size_t size_;
+	size_t capacity_;
 	char* string_;
-
-	void copyString(char*, const char*);
-	size_t getLength(const char*);
 };
 
 #endif // STRING_H_
