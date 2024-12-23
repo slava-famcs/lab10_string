@@ -30,7 +30,7 @@ public:
 	void clear();
 	void insert(const int&, const String&);
 	void insert(const int&, const char*, const int&);
-	void erase(const int&, int);
+	void erase(int, int);
 
 private:
 	size_t size_;

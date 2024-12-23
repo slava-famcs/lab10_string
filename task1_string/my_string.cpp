@@ -179,7 +179,8 @@ void String::insert(const int& index, const char* str, const int& count) {
 	size_ += count;
 }
 
-void String::erase(const int& index, int count = 1) {
+void String::erase(int index, int count = 1) {
+	--index;
 	if (index >= size_) {
 		throw std::out_of_range("index is outside the array");
 	}

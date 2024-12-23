@@ -30,6 +30,9 @@ int main() {
 	str.insert(6, "Bobby", 3);
 	print(str);
 
+	str.erase(6, 10);
+	print(str);
+
 	return 0;
 }
 

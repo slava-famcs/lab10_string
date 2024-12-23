@@ -67,6 +67,7 @@ TEST_F(StringTest, popBackTest) {
 	myString.pop_back();
 	ASSERT_EQ(myString.length(), 7);
 	EXPECT_STREQ(myString.c_str(), "MyStrin");
+	EXPECT_THROW(newString.pop_back(), std::out_of_range);
 }
 
 TEST_F(StringTest, clearTest) {
@@ -84,9 +85,44 @@ TEST_F(StringTest, insertTest) {
 	myString.insert(0, String("Hi "));
 	ASSERT_EQ(myString.length(), 21);
 	EXPECT_STREQ(myString.c_str(), "Hi MyString is in C++");
+	EXPECT_THROW(myString.insert(52, String("Saint Petersburg")), std::out_of_range);
+
 	newString.insert(0, String("Microsoft"));
 	ASSERT_EQ(newString.length(), 9);
 	EXPECT_STREQ(newString.c_str(), "Microsoft");
+	newString.insert(5, String(" "));
+	ASSERT_EQ(newString.length(), 10);
+	EXPECT_STREQ(newString.c_str(), "Micro soft");
+	newString.insert(10, String(" company"));
+	ASSERT_EQ(newString.length(), 18);
+	EXPECT_STREQ(newString.c_str(), "Micro soft company");
+	EXPECT_THROW(newString.insert(42, String("something")), std::out_of_range);
 
-	// TODO insert не выделяет доп. память, когда вставляешь не в конец, а в середину
+	myString.insert(21, "Hello", 4);
+	ASSERT_EQ(myString.length(), 25);
+	EXPECT_STREQ(myString.c_str(), "Hi MyString is in C++Hell");
+	myString.insert(2, " all ", 4);
+	ASSERT_EQ(myString.length(), 29);
+	EXPECT_STREQ(myString.c_str(), "Hi all MyString is in C++Hell");
+	myString.insert(0, "Computer", 4);
+	ASSERT_EQ(myString.length(), 33);
+	EXPECT_STREQ(myString.c_str(), "CompHi all MyString is in C++Hell");
+
+	newString.clear();
+	newString.insert(0, "FAMCS-BSU", 5);
+	ASSERT_EQ(newString.length(), 5);
+	EXPECT_STREQ(newString.c_str(), "FAMCS");
+}
+
+TEST_F(StringTest, eraseTest) {
+	EXPECT_THROW(newString.erase(0), std::out_of_range);
+	EXPECT_THROW(myString.erase(100), std::out_of_range);
+	myString.erase(8);
+	ASSERT_EQ(myString.length(), 7);
+	EXPECT_STREQ(myString.c_str(), "MyStrin");
+	myString.erase(3, 3);
+	ASSERT_EQ(myString.length(), 4);
+	EXPECT_STREQ(myString.c_str(), "Myin");
+	myString.erase(1, myString.length());
+	EXPECT_TRUE(myString.empty());
 }
