@@ -134,7 +134,7 @@ void String::push_back(const char& ch) {
 
 void String::pop_back() {
 	if (!size_) {
-		throw "the string is empty";
+		throw std::out_of_range("the string is empty");
 	}
 	--size_; // посл. симв. остался в памяти, но уже как мусор
 }
@@ -147,38 +147,36 @@ void String::insert(const int& index, const String& str) {
 	if (index > size_) {
 		throw std::out_of_range("index is outside the array");
 	}
+
+	if (capacity_ < size_ + str.size_) {
+		reserve(size_ + str.size_);
+	}
 	for (size_t i = size_; i > index; --i) {
 		string_[i + str.size_ - 1] = string_[i - 1]; // cдвиг вправо
 	}
-	try {
-		for (size_t i = 0; i < str.size_; ++i) {
-			string_[index + i] = str.string_[i];
-		}
+
+	for (size_t i = 0; i < str.size_; ++i) {
+		string_[index + i] = str.string_[i]; // копируем элементы по индексу
 	}
-	catch (const std::bad_alloc&) {
-		reserve(size_ + str.size_);
-		insert(index, str); // рекурсивный вызов
-	}
-	size_ = (index + str.size_) > size_ ? (index + str.size_) : size_;
+	size_ += str.size_;
 }
 
 void String::insert(const int& index, const char* str, const int& count) {
 	if (index > size_) {
 		throw std::out_of_range("index is outside the array");
 	}
+
+	if (capacity_ < size_ + count) {
+		reserve(size_ + count);
+	}
 	for (size_t i = size_; i > index; --i) {
 		string_[i + count - 1] = string_[i - 1];
 	}
-	try {
-		for (size_t i = 0; i < count; ++i) {
-			string_[index + i] = str[i];
-		}
+
+	for (size_t i = 0; i < count; ++i) {
+		string_[index + i] = str[i];
 	}
-	catch (const std::bad_alloc&) {
-		reserve(size_ + count);
-		insert(index, str, count);
-	}
-	size_ = (index + count) > size_ ? (index + count) : size_;
+	size_ += count;
 }
 
 void String::erase(const int& index, int count = 1) {

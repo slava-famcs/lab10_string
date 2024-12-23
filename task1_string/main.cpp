@@ -23,10 +23,12 @@ int main() {
 
 	str.insert(9, String(" in C++"));
 	print(str);
-	str.insert(9, " bread");
+	str.insert(5, " bread");
 	print(str);
-	//str.insert(16, " Hello", 5);
-	//print(str);
+	str.insert(22, " Hello", 5);
+	print(str);
+	str.insert(6, "Bobby", 3);
+	print(str);
 
 	return 0;
 }
