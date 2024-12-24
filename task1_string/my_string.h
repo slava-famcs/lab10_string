@@ -36,6 +36,24 @@ public:
 
 	friend String operator+(const String&, const String&);
 	String& operator+=(const String);
+	friend bool operator<(const String&, const String&);
+	friend bool operator<=(const String&, const String&);
+	friend bool operator>(const String&, const String&);
+	friend bool operator>=(const String&, const String&);
+	friend bool operator==(const String&, const String&);
+	friend bool operator!=(const String&, const String&);
+	friend bool operator<(const String&, const char*);
+	friend bool operator<=(const String&, const char*);
+	friend bool operator>(const String&, const char*);
+	friend bool operator>=(const String&, const char*);
+	friend bool operator==(const String&, const char*);
+	friend bool operator!=(const String&, const char*);
+	friend bool operator<(const char*, const String&);
+	friend bool operator<=(const char*, const String&);
+	friend bool operator>(const char*, const String&);
+	friend bool operator>=(const char*, const String&);
+	friend bool operator==(const char*, const String&);
+	friend bool operator!=(const char*, const String&);
 
 private:
 	size_t size_;

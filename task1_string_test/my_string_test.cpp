@@ -71,6 +71,7 @@ TEST_F(StringTest, popBackTest) {
 }
 
 TEST_F(StringTest, clearTest) {
+	EXPECT_FALSE(myString.empty());
 	myString.clear();
 	EXPECT_TRUE(myString.empty());
 }
@@ -160,4 +161,32 @@ TEST_F(StringTest, compareTest) {
 	EXPECT_EQ(myString.compare("MyBigString"), -1);
 	EXPECT_EQ(newString.compare(""), 0);
 	EXPECT_EQ(newString.compare("smth"), -1);
+}
+
+TEST_F(StringTest, relationalOperatorsTest) {
+	EXPECT_TRUE(myString > newString);
+	EXPECT_FALSE(newString > myString);
+	EXPECT_TRUE(myString >= newString);
+	EXPECT_FALSE(newString >= myString);
+	EXPECT_TRUE(myString >= myString);
+	EXPECT_FALSE(myString < newString);
+	EXPECT_TRUE(newString < myString);
+	EXPECT_FALSE(myString <= newString);
+	EXPECT_TRUE(newString <= myString);
+	EXPECT_TRUE(newString <= newString);
+	EXPECT_TRUE(myString == myString);
+	EXPECT_TRUE(newString == newString);
+	EXPECT_FALSE(myString == newString);
+	EXPECT_FALSE(myString != myString);
+	EXPECT_FALSE(newString != newString);
+	EXPECT_TRUE(myString != newString);
+
+	EXPECT_TRUE(myString < "MyString123");
+	EXPECT_TRUE(myString <= "MyString123");
+	EXPECT_TRUE("MyString123" > myString);
+	EXPECT_TRUE("MyString123" >= myString);
+	EXPECT_FALSE(myString == "MyString123");
+	EXPECT_TRUE(myString != "MyString123");
+	EXPECT_TRUE("MyString" == myString);
+	EXPECT_FALSE("MyString" != myString);
 }

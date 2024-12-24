@@ -223,3 +223,75 @@ int String::compare(const char* str) const {
 	String other = String(str);
 	return compare(other);
 }
+
+bool operator<(const String& lvalue, const String& rvalue) {
+	return lvalue.compare(rvalue) < 0;
+}
+
+bool operator<=(const String& lvalue, const String& rvalue) {
+	return lvalue.compare(rvalue) <= 0;
+}
+
+bool operator>(const String& lvalue, const String& rvalue) {
+	return lvalue.compare(rvalue) > 0;
+}
+
+bool operator>=(const String& lvalue, const String& rvalue) {
+	return lvalue.compare(rvalue) >= 0;
+}
+
+bool operator==(const String& lvalue, const String& rvalue) {
+	return lvalue.compare(rvalue) == 0;
+}
+
+bool operator!=(const String& lvalue, const String& rvalue) {
+	return lvalue.compare(rvalue) != 0;
+}
+
+bool operator<(const String& lvalue, const char* rvalue) {
+	return lvalue.compare(rvalue) < 0;
+}
+
+bool operator<=(const String& lvalue, const char* rvalue) {
+	return lvalue.compare(rvalue) <= 0;
+}
+
+bool operator>(const String& lvalue, const char* rvalue) {
+	return lvalue.compare(rvalue) > 0;
+}
+
+bool operator>=(const String& lvalue, const char* rvalue) {
+	return lvalue.compare(rvalue) >= 0;
+}
+
+bool operator==(const String& lvalue, const char* rvalue) {
+	return lvalue.compare(rvalue) == 0;
+}
+
+bool operator!=(const String& lvalue, const char* rvalue) {
+	return lvalue.compare(rvalue) != 0;
+}
+
+bool operator<(const char* lvalue, const String& rvalue) {
+	return rvalue.compare(lvalue) > 0;
+}
+
+bool operator<=(const char* lvalue, const String& rvalue) {
+	return rvalue.compare(lvalue) >= 0;
+}
+
+bool operator>(const char* lvalue, const String& rvalue) {
+	return rvalue.compare(lvalue) < 0;
+}
+
+bool operator>=(const char* lvalue, const String& rvalue) {
+	return rvalue.compare(lvalue) <= 0;
+}
+
+bool operator==(const char* lvalue, const String& rvalue) {
+	return rvalue.compare(lvalue) == 0;
+}
+
+bool operator!=(const char* lvalue, const String& rvalue) {
+	return rvalue.compare(lvalue) != 0;
+}
