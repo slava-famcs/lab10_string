@@ -4,7 +4,6 @@
 
 #include "my_string.h"
 #include <cstring>
-#include <exception>
 #include <stdexcept>
 
 String::String() : size_(0), capacity_(0), string_(nullptr) {}
@@ -41,7 +40,9 @@ String& String::operator=(String&& other) noexcept {
 		string_ = other.string_;
 		size_ = other.size_;
 		capacity_ = other.capacity_;
-		other = String();
+		other.string_ = nullptr;
+		delete other.string_;
+		other.size_ = other.capacity_ = 0;
 	}
 	return *this;
 }
@@ -189,4 +190,28 @@ void String::erase(int index, int count = 1) {
 		string_[i] = string_[i + count]; // cдвиг влево
 	}
 	size_ -= count;
+}
+
+String operator+(const String& lvalue, const String& rvalue) {
+	String sum;
+	sum.reserve(lvalue.size_ + rvalue.size_);
+	for (size_t i = 0; i < lvalue.size_; ++i) {
+		sum.push_back(lvalue.string_[i]);
+	}
+	for (size_t i = 0; i < rvalue.size_; ++i) {
+		sum.push_back(rvalue.string_[i]);
+	}
+	return sum;
+}
+
+String& String::operator+=(const String other) {
+	reserve(size_ + other.size_);
+	for (size_t i = 0; i < other.size_; ++i) {
+		push_back(other.string_[i]);
+	}
+	return *this;
+}
+
+int String::compare(const String& other) const {
+	
 }

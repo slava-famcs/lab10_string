@@ -31,6 +31,10 @@ public:
 	void insert(const int&, const String&);
 	void insert(const int&, const char*, const int&);
 	void erase(int, int);
+	int compare(const String&) const;
+
+	friend String operator+(const String&, const String&);
+	String& operator+=(const String);
 
 private:
 	size_t size_;

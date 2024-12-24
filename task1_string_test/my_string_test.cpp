@@ -126,3 +126,25 @@ TEST_F(StringTest, eraseTest) {
 	myString.erase(1, myString.length());
 	EXPECT_TRUE(myString.empty());
 }
+
+TEST_F(StringTest, operatorPlusConcatenationTest) {
+	String result = myString + newString;
+	ASSERT_EQ(result.length(), 8);
+	EXPECT_STREQ(result.c_str(), "MyString");
+	newString.insert(0, "World");
+	result = myString + newString;
+	ASSERT_EQ(result.length(), 13);
+	EXPECT_STREQ(result.c_str(), "MyStringWorld");
+}
+
+TEST_F(StringTest, operatorPlusEqualConcatenationTest) {
+	myString += newString;
+	ASSERT_EQ(myString.length(), 8);
+	EXPECT_STREQ(myString.c_str(), "MyString");
+	newString += myString;
+	ASSERT_EQ(newString.length(), 8);
+	EXPECT_STREQ(newString.c_str(), "MyString");
+	myString += myString;
+	ASSERT_EQ(myString.length(), 16);
+	EXPECT_STREQ(myString.c_str(), "MyStringMyString");
+}

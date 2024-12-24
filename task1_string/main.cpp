@@ -33,6 +33,13 @@ int main() {
 	str.erase(6, 10);
 	print(str);
 
+	String str1 = String("str1");
+	String str2 = String("str2");
+	str = str1 + str2;
+	print(str);
+	str1 += str2;
+	print(str1);
+
 	return 0;
 }
 
