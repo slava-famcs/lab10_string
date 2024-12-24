@@ -53,8 +53,12 @@ String::~String() {
 	delete string_;
 }
 
+int String::capacity() const {
+	return (int)capacity_;
+}
+
 int String::length() const {
-	return (int) size_;
+	return (int)size_;
 }
 
 bool String::empty() const {

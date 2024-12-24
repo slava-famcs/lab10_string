@@ -13,6 +13,7 @@ public:
 	String& operator=(const String&) = default; // оператор копирования
 	String& operator=(String&&) noexcept; // оператор перемещения
 
+	int capacity() const;
 	int length() const;
 	bool empty() const;
 	const char* c_str() const;

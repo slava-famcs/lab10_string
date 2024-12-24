@@ -40,17 +40,12 @@ TEST_F(StringTest, backTest) {
 }
 
 TEST_F(StringTest, reserveTest) {
-	myString.reserve(15);
-	// проверить можно лишь не изм. ли размер и не изм. ли содержимое строки
-	// т.к. у массивов нет методов, позволяющих узнать их вместимость
-	ASSERT_EQ(myString.length(), 8);
-	EXPECT_STREQ(myString.c_str(), "MyString");
-	newString.reserve(5);
-	ASSERT_EQ(newString.length(), 0);
-	EXPECT_TRUE(newString.empty());
-
-	// TODO сделать метод getCapacity() и через него сделать этот тест
-
+	ASSERT_EQ(myString.capacity(), 8);
+	myString.reserve(20);
+	EXPECT_EQ(myString.capacity(), 20);
+	ASSERT_EQ(newString.capacity(), 0);
+	newString.reserve(10);
+	EXPECT_EQ(newString.capacity(), 10);
 }
 
 TEST_F(StringTest, pushBackTest) {
