@@ -40,6 +40,17 @@ int main() {
 	str1 += str2;
 	print(str1);
 
+	std::cout << str.compare(str1) << '\n';
+	str.push_back('A');
+	std::cout << str.compare(str1) << '\n';
+	str.pop_back();
+	str.pop_back();
+	std::cout << str.compare(str1) << '\n';
+	str = "Hello World";
+	std::cout << str.compare("Hello") << '\n';
+	std::cout << str.compare("Hello World") << '\n';
+	std::cout << str.compare("Hello C++ World") << '\n';
+
 	return 0;
 }
 

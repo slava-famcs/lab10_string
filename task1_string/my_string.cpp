@@ -213,5 +213,13 @@ String& String::operator+=(const String other) {
 }
 
 int String::compare(const String& other) const {
-	
+	if (size_ == other.size_) {
+		return 0;
+	}
+	return (size_ > other.size_) ? 1 : -1;
+}
+
+int String::compare(const char* str) const {
+	String other = String(str);
+	return compare(other);
 }

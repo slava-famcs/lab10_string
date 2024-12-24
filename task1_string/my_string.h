@@ -32,6 +32,7 @@ public:
 	void insert(const int&, const char*, const int&);
 	void erase(int, int);
 	int compare(const String&) const;
+	int compare(const char*) const;
 
 	friend String operator+(const String&, const String&);
 	String& operator+=(const String);

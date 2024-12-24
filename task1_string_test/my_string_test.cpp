@@ -148,3 +148,16 @@ TEST_F(StringTest, operatorPlusEqualConcatenationTest) {
 	ASSERT_EQ(myString.length(), 16);
 	EXPECT_STREQ(myString.c_str(), "MyStringMyString");
 }
+
+TEST_F(StringTest, compareTest) {
+	EXPECT_EQ(myString.compare(newString), 1);
+	EXPECT_EQ(myString.compare(myString), 0);
+	EXPECT_EQ(myString.compare(String("MyBigString")), -1);
+	EXPECT_EQ(newString.compare(String()), 0);
+	EXPECT_EQ(newString.compare(String("str")), -1);
+	EXPECT_EQ(myString.compare(""), 1);
+	EXPECT_EQ(myString.compare("MyString"), 0);
+	EXPECT_EQ(myString.compare("MyBigString"), -1);
+	EXPECT_EQ(newString.compare(""), 0);
+	EXPECT_EQ(newString.compare("smth"), -1);
+}
